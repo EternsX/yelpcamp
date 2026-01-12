@@ -40,7 +40,6 @@ module.exports.showCampground = async (req, res) => {
         req.flash('error', 'Cannot find that campground!')
         return res.redirect('/campgrounds');
     }
-    console.log(campground);
     res.render('campgrounds/show', { campground });
 }
 
@@ -60,7 +59,7 @@ module.exports.updateCampground = async (req, res) => {
     const geoData = await maptilerClient.geocoding.forward(req.body.campground.location, { limit: 1 });
     if (!geoData.features?.length) {
         req.flash('error', 'Could not geocode that location. Pleaes try again and enter a valid location.');
-        return res.redirect(`/campgrounds/${campground._id}`);
+        return res.redirect(`/campgrounds/${id}`);
     }
 
     const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground}, { new: true });
@@ -89,7 +88,7 @@ module.exports.updateCampground = async (req, res) => {
 
 module.exports.deleteCampground = async (req, res) => {
     const { id } = req.params;
-    const campground = await Campground.findByIdAndUpdate(id, {...req.body.campground});
-    req.flash('success', 'Succesfully updated your campground!')
-    res.redirect(`/campgrounds/${campground._id}`);
+    const campground = await Campground.findByIdAndDelete(id);
+    req.flash('success', 'Succesfully deleted your campground!')
+    res.redirect(`/campgrounds`);
 }

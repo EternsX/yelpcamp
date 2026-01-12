@@ -30,7 +30,7 @@ module.exports.login = (req, res) => {
     res.redirect(redirectUrl);
 }
 
-module.exports.logout = async (req, res) => {
+module.exports.logout = async (req, res, next) => {
     req.logout(function (err) {
         if (err) return next(err);
         req.flash('success', 'Goodbye!');
